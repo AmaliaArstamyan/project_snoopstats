@@ -1,20 +1,20 @@
+# accounts/forms.py
 from django import forms
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
-class RegisterForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
+class RegisterForm(forms.Form):  # Ensure this name is 'RegisterForm' and not 'RegistrationForm'
+    first_name = forms.CharField(max_length=100)
+    last_name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput())
+    password_confirm = forms.CharField(widget=forms.PasswordInput())
 
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'password']
+    def clean_password_confirm(self):
+        password = self.cleaned_data.get('password')
+        password_confirm = self.cleaned_data.get('password_confirm')
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
+        if password != password_confirm:
+            raise ValidationError("Passwords do not match.")
 
-        if password and confirm_password and password != confirm_password:
-            raise forms.ValidationError("Passwords do not match")
-
-        return cleaned_data
+        return password_confirm
