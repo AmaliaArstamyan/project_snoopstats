@@ -51,7 +51,12 @@ LOGIN_URL = '/login/'
 # Add this if not already present
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),  # This tells Django where to find static files
+    BASE_DIR / "static",
 ]
+
+# For handling media files (e.g., images)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 MIDDLEWARE = [
