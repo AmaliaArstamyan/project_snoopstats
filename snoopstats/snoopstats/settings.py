@@ -51,9 +51,27 @@ LOGIN_URL = '/login/'
 # Add this if not already present
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),  # This tells Django where to find static files
+    BASE_DIR / "static",
 ]
 
+# For handling media files (e.g., images)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"  # Use your email provider
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "ameliearstamyan@gmail.com"
+EMAIL_HOST_PASSWORD = "Rokinrol13."  # Use an App Password if using Gmail
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# Other email settings (for testing purposes, replace with actual SMTP settings later)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+
+
+#_____________________________________End
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -136,3 +154,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#_______________________Backend
+
+
