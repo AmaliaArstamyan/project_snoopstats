@@ -10,10 +10,16 @@ from django.http import HttpResponseRedirect
 # views.py
 from .forms import RegisterForm
 from accounts.login import LoginForm
+from accounts.models import UserSettings
 
 
 def user_logout(request):
     logout(request)  # This will log the user out
+    # Optionally, clear user settings or reset them here
+    if request.user.is_authenticated:
+        user_settings = UserSettings.objects.get(user=request.user)
+        user_settings.remember_password = False
+        user_settings.save()
     return redirect('login')  # Redirect to the login page
 
 @login_required
@@ -77,8 +83,9 @@ def login_view(request):
         form = LoginForm(request.POST)
 
         if form.is_valid():
-            username_or_email = form.cleaned_data['username_or_email']  # Ensure this matches the form field name
+            username_or_email = form.cleaned_data['username_or_email']
             password = form.cleaned_data['password']
+            remember_password = request.POST.get('remember_password')  # Get the checkbox value
 
             # Check if the input is an email or a username
             if '@' in username_or_email:  # It's an email
@@ -88,11 +95,17 @@ def login_view(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Redirect to the homepage after successful login
+
+                # Check if the "Remember Password" checkbox is checked
+                if remember_password == 'on':  # Checkbox is checked, remember the session
+                    request.session.set_expiry(1209600)  # 2 weeks
+                else:  # Checkbox is not checked, standard session expiration
+                    request.session.set_expiry(0)  # Session expires when browser closes
+                
+                return redirect('home')  # Redirect to home after login
             else:
-                messages.error(request, 'Invalid username/email or password.')
-                return redirect('login/')  # Redirect back to the login page with an error
-    else:
-        form = LoginForm()
+                messages.error(request, 'Invalid username or password.')
+        else:
+            messages.error(request, 'Invalid username or password.')
 
     return render(request, 'login.html')

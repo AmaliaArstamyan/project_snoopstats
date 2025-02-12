@@ -21,6 +21,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -28,5 +29,5 @@ urlpatterns = [
     path('', include('accounts.urls')),
      path('home/', views.home, name='home'),
      path('admin/', admin.site.urls),
-     path('', views.home, name='home'),
+     path('', views.landing_page, name="landing_page"),
 ]
