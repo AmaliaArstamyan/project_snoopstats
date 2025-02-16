@@ -50,10 +50,26 @@ LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/login/'
 # Add this if not already present
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),  # This tells Django where to find static files
-    BASE_DIR / "static",
+    os.path.join(BASE_DIR, "snoopstats", "static"),  # This tells Django where to find static files
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 # For handling media files (e.g., images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -87,7 +103,7 @@ ROOT_URLCONF = 'snoopstats.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "dashboard/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

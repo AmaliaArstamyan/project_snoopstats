@@ -20,15 +20,23 @@ from accounts.views import register, login_view
 from . import views
 from django.contrib.auth import views as auth_views
 from django.urls import path
+#___________API
+from .views import content_page
+from .views import google_search_view
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+     path("admin/", admin.site.urls),  # Only one admin path!
 
     #______________New
     path('', include('accounts.urls')),
-     path('home/', views.home, name='home'),
-     path('admin/', admin.site.urls),
-     path('', views.landing_page, name="landing_page"),
-     path('index/', views.landing_page, name="index"),
+    path('home/', views.home, name='home'),
+    path('', views.landing_page, name="landing_page"),
+    path('index/', views.landing_page, name="index"),
+     #_______________________API
+    path('content/', content_page, name='content_page'),
+    path('google_search/', views.google_search_view, name='google_search_view'),
 ]
+
+
+
