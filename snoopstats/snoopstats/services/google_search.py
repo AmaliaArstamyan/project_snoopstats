@@ -6,8 +6,8 @@ from snoopstats.models import Post
 logger = logging.getLogger(__name__)
 
 GOOGLE_SEARCH_URL = "https://www.googleapis.com/customsearch/v1"
-GOOGLE_API_KEY = "AIzaSyB96wTQF0ZOcjs4jnF9kh-K4XR95x4HM6w"  # Replace with your API key
-SEARCH_ENGINE_ID = "028f95e95198d4a93"  # Replace with your search engine ID
+GOOGLE_API_KEY = "AIzaSyB96wTQF0ZOcjs4jnF9kh-K4XR95x4HM6w"  #  API key
+SEARCH_ENGINE_ID = "028f95e95198d4a93"  #  search engine ID
 
 def search_google(query):
     """Fetch search results from Google Custom Search API and save to the database."""

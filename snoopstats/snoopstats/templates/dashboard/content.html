@@ -47,7 +47,7 @@
     </div>
 </nav>
 
-    <!-- Navigation Tabs -->7
+    <!-- Navigation Tabs -->
     <div style="margin-top: 30px;">
     <ul class="nav nav-pills mb-4 justify-content-center" id="contentTabs">
         <li class="nav-item mx-3"><a class="nav-link active" data-bs-toggle="pill" href="#googleSection">Google</a></li>
@@ -59,57 +59,75 @@
     <div class="container mt-4">
         <div class="tab-content">
             <!-- Loop through platforms passed from the view -->
-{% for platform in platforms %}
-<div class="tab-pane fade{% if platform == 'google' %} show active{% endif %}" id="{{ platform }}Section">
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Search and Discover</h2>
-        <div class="row justify-content-center">
-            <form method="get" action="{% url 'google_search_view' %}">
-                <input type="text" class="form-control search-input" name="q" placeholder="Search for posts or videos..." value="{{ query }}">
-                <button type="submit" class="btn btn-primary mt-2">Search</button>
-            </form>
-            <div class="col-12 col-md-4">
-                <select class="form-select form-select-sm sort-by">
-                    <option value="likes_asc">Likes (Ascending)</option>
-                    <option value="likes_desc">Likes (Descending)</option>
-                    <option value="comments_asc">Comments (Ascending)</option>
-                    <option value="comments_desc">Comments (Descending)</option>
-                    <option value="shares_asc">Shares (Ascending)</option>
-                    <option value="shares_desc">Shares (Descending)</option>
-                </select>
+            {% for platform in platforms %}
+            <div class="tab-pane fade{% if platform == 'google' %} show active{% endif %}" id="{{ platform }}Section">
+                <div class="container mt-5">
+                    <h2 class="text-center mb-4">Search and Discover</h2>
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <form method="get" action="{% url 'content_page' %}" class="d-flex align-items-center">
+                                <input type="text" class="form-control search-input" name="q" placeholder="Search for posts or videos..." value="{{ query }}" style="width: 500px;">
+                                <button type="submit" class="btn btn-primary ml-2" style="margin-left: 20px;">Search</button>
+                            </form>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm sort-by">
+                                <option value="likes_asc">Likes (Ascending)</option>
+                                <option value="likes_desc">Likes (Descending)</option>
+                                <option value="comments_asc">Comments (Ascending)</option>
+                                <option value="comments_desc">Comments (Descending)</option>
+                                <option value="shares_asc">Shares (Ascending)</option>
+                                <option value="shares_desc">Shares (Descending)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                </div>
+            
+                <div class="container mt-4">
+                    <h2 class="text-center mb-4">Search Results Dashboard</h2>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Post Name</th>
+                                <th>Likes</th>
+                                <th>Shares</th>
+                                <th>Comments</th>
+                                <th>Views</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Loop through the posts from the database -->
+                            {% for post in posts %}
+                                <tr>
+                                    <td>{{ post.title }}</td>
+                                    <td>{{ post.likes }}</td>
+                                    <td>{{ post.shares }}</td>
+                                    <td>{{ post.comments }}</td>
+                                    <td>{{ post.views }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="5" class="text-center">No posts found.</td></tr>
+                            {% endfor %}
+            
+                            <!-- Loop through the search results from Google -->
+                            {% for result in google_results %}
+                                <tr>
+                                    <td>{{ result.title }}</td>
+                                    <td>{{ result.likes }}</td>
+                                    <td>{{ result.shares }}</td>
+                                    <td>{{ result.comments }}</td>
+                                    <td>{{ result.views }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="5" class="text-center">No results found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <div class="container mt-4">
-        <h2 class="text-center mb-4">Search Results Dashboard</h2>
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Post Name</th>
-                    <th>Likes</th>
-                    <th>Shares</th>
-                    <th>Comments</th>
-                    <th>Views</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for result in results %}
-                    <tr>
-                        <td>{{ result.title }}</td>
-                        <td>{{ result.likes }}</td>
-                        <td>{{ result.shares }}</td>
-                        <td>{{ result.comments }}</td>
-                        <td>{{ result.views }}</td>
-                    </tr>
-                {% empty %}
-                    <tr><td colspan="5" class="text-center">No results found.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-{% endfor %}
+            {% endfor %}
+            
 
         </div>
     </div>

@@ -17,3 +17,21 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+### _______________________WEBsiteInfo_________
+class WebsiteInfo(models.Model):
+    
+    SECTION_CHOICES = [
+        ('about', 'About'),
+        ('contact', 'Contact'),
+        ('services', 'Services'),
+    ]
+
+    section = models.CharField(max_length=20, choices=SECTION_CHOICES, unique=True)
+    title = models.CharField(max_length=255)
+    content = models.TextField()  # Content for each section
+
+    def __str__(self):
+        return self.title
+
+
