@@ -16,25 +16,41 @@ def landing_page(request):
     return render(request, 'landing_page/index.html')
 
 
-# API
+# _______________________________________________API
 # views.py
 from django.shortcuts import render
-from .models import Post
-from .services.google_search import search_google
+from services.google_search import search_google
+from services.youtube_scraper import search_youtube
+from services.facebook_search import search_facebook
+from snoopstats.models import Post
 
 def content_page(request):
-    query = request.GET.get("q", "")
-    results = search_google(query) if query else []
+    query = request.GET.get('q', '')
 
-    # Get posts from the database (Google posts in this case)
-    posts = Post.objects.filter(platform='google')  # Filter posts by platform (google)
+    google_results, youtube_results, facebook_results = [], [], []
 
-    return render(request, "dashboard/content.html", {
-        "google_results": results,
+    if query:
+        google_results = search_google(query)
+        youtube_results = search_youtube(query)
+        facebook_results = search_facebook(query)
+
+    context = {
         "query": query,
-        "posts": posts,
-        "platforms": ['google', 'youtube', 'facebook'],  # Adjust if needed
-    })
+        "google_results": google_results,
+        "youtube_results": youtube_results,
+        "facebook_results": facebook_results,
+        "platforms": ["google", "youtube", "facebook"],
+    }
+
+    return render(request, "your_template.html", context)
+
+
+
+
+
+
+#________________________________________________________________________________________________________
+
 #________________About, Services, Contact Us
 from django.shortcuts import render
 from .models import WebsiteInfo
@@ -44,26 +60,16 @@ def index_page(request):
     services_info = WebsiteInfo.objects.filter(section='services').first()
     contact_info = WebsiteInfo.objects.filter(section='contact').first()
 
-    return render(request, "landing_page/index.html", {
+    context = {
         "about_info": about_info,
         "services_info": services_info,
         "contact_info": contact_info,
-    })
-
-
-# from django.shortcuts import render
-# from .services.google_search import search_google
-
-# import logging
-
-# logger = logging.getLogger(__name__)
-
-# def google_search_view(request):
-#     query = request.GET.get("q", "")
-#     logger.debug(f"Search Query: {query}")
-#     results = search_google(query) if query else []
-#     logger.debug(f"Search Results: {results}")
+    }
     
-#     return render(request, "dashboard/content.html", {"results": results, "query": query})
+    return render(request, "landing_page/index.html", context)
+
+# Statystics view
+def statistics(request):
+    return render(request, 'dashboard/statistics.html')
 
 

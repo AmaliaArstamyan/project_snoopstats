@@ -27,7 +27,7 @@
                     <a class="nav-link text-white px-3 py-2 rounded transition-all hover:bg-primary hover:text-white" href="{% url 'content_page' %}">Content</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white px-3 py-2 rounded transition-all hover:bg-primary hover:text-white" href="discover.html">Discover</a>
+                    <a class="nav-link text-white px-3 py-2 rounded transition-all hover:bg-primary hover:text-white" href="{% url 'statistics' %}">Statistics</a>
                 </li>
             </ul>
 
@@ -60,7 +60,7 @@
     </div>
     <div class="row">
         <div class="col-md-6 mb-4">
-            <a href="content.html" class="card shadow-lg border-0 text-center p-4 bg-gradient text-white rounded text-decoration-none">
+            <a href="{% url 'content_page' %}" class="card shadow-lg border-0 text-center p-4 bg-gradient text-white rounded text-decoration-none">
                 <div class="card-body">
                     <i class="bi bi-easel display-4 mb-3"></i>
                     <h5 class="card-title mb-3" style="color: #FF6F61;">Content</h5>
@@ -69,11 +69,11 @@
             </a>
         </div>
         <div class="col-md-6 mb-4">
-            <a href="discover.html" class="card shadow-lg border-0 text-center p-4 bg-gradient text-white rounded text-decoration-none">
+            <a href="{% url 'statistics' %}" class="card shadow-lg border-0 text-center p-4 bg-gradient text-white rounded text-decoration-none">
                 <div class="card-body">
                     <i class="bi bi-gem display-4 mb-3"></i>
-                    <h5 class="card-title mb-3" style="color: #FF6F61;">Discovers</h5>
-                    <p class="text-muted">Uncover new strategies by monitoring your competitor's discoveries.</p>
+                    <h5 class="card-title mb-3" style="color: #FF6F61;">Statistics</h5>
+                    <p class="text-muted"> this label can lead to a page where you show more detailed statistics, such as the performance of popular posts, trends, or analytics from the dashboard.</p>
                 </div>
             </a>
         </div>
