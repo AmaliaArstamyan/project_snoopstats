@@ -19,9 +19,9 @@ def landing_page(request):
 # _______________________________________________API
 # views.py
 from django.shortcuts import render
-from services.google_search import search_google
-from services.youtube_scraper import search_youtube
-from services.facebook_search import search_facebook
+from snoopstats.services.google_search import search_google
+from snoopstats.services.youtube_scraper import search_youtube
+from snoopstats.services.facebook_search import search_facebook
 from snoopstats.models import Post
 
 def content_page(request):
@@ -34,6 +34,10 @@ def content_page(request):
         youtube_results = search_youtube(query)
         facebook_results = search_facebook(query)
 
+    # Query the database to get posts
+    posts = Post.objects.all()  # You can also filter if needed, for example:
+    # posts = Post.objects.filter(some_field=value)
+
     context = {
         "query": query,
         "google_results": google_results,
@@ -42,7 +46,7 @@ def content_page(request):
         "platforms": ["google", "youtube", "facebook"],
     }
 
-    return render(request, "your_template.html", context)
+    return render(request, "dashboard/content.html", context)
 
 
 

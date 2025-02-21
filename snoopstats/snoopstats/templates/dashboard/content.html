@@ -49,11 +49,18 @@
 
     <!-- Navigation Tabs -->
     <div style="margin-top: 30px;">
-    <ul class="nav nav-pills mb-4 justify-content-center" id="contentTabs">
-        <li class="nav-item mx-3"><a class="nav-link active" data-bs-toggle="pill" href="#googleSection">Google</a></li>
-        <li class="nav-item mx-3"><a class="nav-link" data-bs-toggle="pill" href="#youtubeSection">YouTube</a></li>
-        <li class="nav-item mx-3"><a class="nav-link" data-bs-toggle="pill" href="#facebookSection">Facebook</a></li>
-    </ul>
+        <ul class="nav nav-pills mb-4 justify-content-center" id="contentTabs">
+            <li class="nav-item mx-3">
+                <a class="nav-link {% if platform == 'google' %}active{% endif %}" data-bs-toggle="pill" href="#googleSection">Google</a>
+            </li>
+            <li class="nav-item mx-3">
+                <a class="nav-link {% if platform == 'youtube' %}active{% endif %}" data-bs-toggle="pill" href="#youtubeSection">YouTube</a>
+            </li>
+            <li class="nav-item mx-3">
+                <a class="nav-link {% if platform == 'facebook' %}active{% endif %}" data-bs-toggle="pill" href="#facebookSection">Facebook</a>
+            </li>
+        </ul>
+       
 </div>
     <!-- Content Sections -->
     <div class="container mt-4">
@@ -69,6 +76,7 @@
                                 <input type="text" class="form-control search-input" name="q" placeholder="Search for posts or videos..." value="{{ query }}" style="width: 500px;">
                                 <button type="submit" class="btn btn-primary ml-2" style="margin-left: 20px;">Search</button>
                             </form>
+                            
                         </div>
                         <div class="col-auto">
                             <select class="form-select form-select-sm sort-by">
@@ -97,31 +105,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Loop through the posts from the database -->
-                            {% for post in posts %}
-                                <tr>
-                                    <td>{{ post.title }}</td>
-                                    <td>{{ post.likes }}</td>
-                                    <td>{{ post.shares }}</td>
-                                    <td>{{ post.comments }}</td>
-                                    <td>{{ post.views }}</td>
-                                </tr>
-                            {% empty %}
-                                <tr><td colspan="5" class="text-center">No posts found.</td></tr>
-                            {% endfor %}
+                             <!-- Loop through the posts from the database -->
+            {% for post in posts %}
+            <tr>
+                <td>{{ post.title }}</td> <!-- Post title -->
+                <td>{{ post.likes }}</td> <!-- Post likes -->
+                <td>{{ post.shares }}</td> <!-- Post shares -->
+                <td>{{ post.comments }}</td> <!-- Post comments -->
+                <td>{{ post.views }}</td> <!-- Post views -->
+            </tr>
+            {% empty %}
+            <!-- If no posts found, show this -->
+            <tr><td colspan="5" class="text-center">No posts found.</td></tr>
+            {% endfor %}
+                        
             
-                            <!-- Loop through the search results from Google -->
-                            {% for result in google_results %}
-                                <tr>
-                                    <td>{{ result.title }}</td>
-                                    <td>{{ result.likes }}</td>
-                                    <td>{{ result.shares }}</td>
-                                    <td>{{ result.comments }}</td>
-                                    <td>{{ result.views }}</td>
-                                </tr>
-                            {% empty %}
-                                <tr><td colspan="5" class="text-center">No results found.</td></tr>
-                            {% endfor %}
+                          
                         </tbody>
                     </table>
                 </div>
