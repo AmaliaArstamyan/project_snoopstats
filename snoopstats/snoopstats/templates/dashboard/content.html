@@ -51,85 +51,60 @@
     <div style="margin-top: 30px;">
         <ul class="nav nav-pills mb-4 justify-content-center" id="contentTabs">
             <li class="nav-item mx-3">
-                <a class="nav-link {% if platform == 'google' %}active{% endif %}" data-bs-toggle="pill" href="#googleSection">Google</a>
+                <a class="nav-link {% if active_platform == 'google' %}active{% endif %}" data-bs-toggle="pill" href="#googleSection">Google</a>
             </li>
             <li class="nav-item mx-3">
-                <a class="nav-link {% if platform == 'youtube' %}active{% endif %}" data-bs-toggle="pill" href="#youtubeSection">YouTube</a>
+                <a class="nav-link {% if active_platform == 'youtube' %}active{% endif %}" data-bs-toggle="pill" href="#youtubeSection">YouTube</a>
             </li>
             <li class="nav-item mx-3">
-                <a class="nav-link {% if platform == 'facebook' %}active{% endif %}" data-bs-toggle="pill" href="#facebookSection">Facebook</a>
+                <a class="nav-link {% if active_platform == 'facebook' %}active{% endif %}" data-bs-toggle="pill" href="#facebookSection">Facebook</a>
             </li>
         </ul>
        
 </div>
     <!-- Content Sections -->
-    <div class="container mt-4">
-        <div class="tab-content">
-            <!-- Loop through platforms passed from the view -->
-            {% for platform in platforms %}
-            <div class="tab-pane fade{% if platform == 'google' %} show active{% endif %}" id="{{ platform }}Section">
-                <div class="container mt-5">
-                    <h2 class="text-center mb-4">Search and Discover</h2>
-                    <div class="row justify-content-center">
-                        <div class="col-auto">
-                            <form method="get" action="{% url 'content_page' %}" class="d-flex align-items-center">
-                                <input type="text" class="form-control search-input" name="q" placeholder="Search for posts or videos..." value="{{ query }}" style="width: 500px;">
-                                <button type="submit" class="btn btn-primary ml-2" style="margin-left: 20px;">Search</button>
-                            </form>
-                            
-                        </div>
-                        <div class="col-auto">
-                            <select class="form-select form-select-sm sort-by">
-                                <option value="likes_asc">Likes (Ascending)</option>
-                                <option value="likes_desc">Likes (Descending)</option>
-                                <option value="comments_asc">Comments (Ascending)</option>
-                                <option value="comments_desc">Comments (Descending)</option>
-                                <option value="shares_asc">Shares (Ascending)</option>
-                                <option value="shares_desc">Shares (Descending)</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                </div>
-            
-                <div class="container mt-4">
-                    <h2 class="text-center mb-4">Search Results Dashboard</h2>
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Post Name</th>
-                                <th>Likes</th>
-                                <th>Shares</th>
-                                <th>Comments</th>
-                                <th>Views</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                             <!-- Loop through the posts from the database -->
-            {% for post in posts %}
-            <tr>
-                <td>{{ post.title }}</td> <!-- Post title -->
-                <td>{{ post.likes }}</td> <!-- Post likes -->
-                <td>{{ post.shares }}</td> <!-- Post shares -->
-                <td>{{ post.comments }}</td> <!-- Post comments -->
-                <td>{{ post.views }}</td> <!-- Post views -->
-            </tr>
-            {% empty %}
-            <!-- If no posts found, show this -->
-            <tr><td colspan="5" class="text-center">No posts found.</td></tr>
-            {% endfor %}
-                        
-            
-                          
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% endfor %}
-            
+<div class="container mt-4">
+    <div class="tab-content">
+        {% for platform, posts in platforms.items %}
+        <!--__________________________ Search and Sorting ________________________________-->
 
+
+        <!--__________________________ END ________________________________-->
+
+
+        <div class="tab-pane fade{% if forloop.first %} show active{% endif %}" id="{{ platform }}Section">
+            <div class="container mt-4">
+                <h2 class="text-center mb-4">{{ platform|title }} Posts</h2>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Post Name</th>
+                            <th>Likes</th>
+                            <th>Shares</th>
+                            <th>Comments</th>
+                            <th>Views</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for post in posts %}
+                        <tr>
+                           <td><a href="{% url 'statistics' %}">{{ post.title }}</a></td>
+                            <td>{{ post.likes }}</td>
+                            <td>{{ post.shares }}</td>
+                            <td>{{ post.comments }}</td>
+                            <td>{{ post.views }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center">No posts found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
+        {% endfor %}
     </div>
+</div>
+
 
     <!-- Footer -->
     <footer class="py-5 mt-auto">

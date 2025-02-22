@@ -15,30 +15,24 @@ def search_google(query):
         logger.warning("Empty query passed to Google search.")
         return []
 
-    params = {
-        "key": GOOGLE_API_KEY,
-        "cx": SEARCH_ENGINE_ID,
-        "q": query
-    }
-
+    params = {"key": GOOGLE_API_KEY, "cx": SEARCH_ENGINE_ID, "q": query}
     try:
         response = requests.get(GOOGLE_SEARCH_URL, params=params)
-        response.raise_for_status()  # Raises an exception for 4xx/5xx status codes
-
+        response.raise_for_status()
+        
         logger.debug(f"Google Search API response status: {response.status_code}")
         search_results = response.json().get("items", [])
         
         if not search_results:
             logger.info(f"No results found for query: {query}")
-
-        # Save search results to the database
+        
         posts = []
         for result in search_results:
-            post, created = Post.objects.get_or_create(
+            post, _ = Post.objects.get_or_create(
                 title=result.get("title", ""),
-                platform="google",  # Set the platform here
+                platform="google",
                 defaults={
-                    "views": result.get("views", 0),  # Example data, replace with actual field if available
+                    "views": result.get("views", 0),
                     "likes": result.get("likes", 0),
                     "shares": result.get("shares", 0),
                     "comments": result.get("comments", 0)
@@ -51,7 +45,6 @@ def search_google(query):
     except requests.exceptions.RequestException as e:
         logger.error(f"Error occurred while making the request to Google Search API: {e}")
         return []
-
     except ValueError as e:
         logger.error(f"Error decoding JSON response: {e}")
         return []

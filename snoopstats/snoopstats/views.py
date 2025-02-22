@@ -25,28 +25,22 @@ from snoopstats.services.facebook_search import search_facebook
 from snoopstats.models import Post
 
 def content_page(request):
-    query = request.GET.get('q', '')
 
-    google_results, youtube_results, facebook_results = [], [], []
 
-    if query:
-        google_results = search_google(query)
-        youtube_results = search_youtube(query)
-        facebook_results = search_facebook(query)
+    posts = Post.objects.all()  # Load all posts
+    active_platform = request.GET.get('platform', 'google') 
 
-    # Query the database to get posts
-    posts = Post.objects.all()  # You can also filter if needed, for example:
-    # posts = Post.objects.filter(some_field=value)
 
-    context = {
-        "query": query,
-        "google_results": google_results,
-        "youtube_results": youtube_results,
-        "facebook_results": facebook_results,
-        "platforms": ["google", "youtube", "facebook"],
+     
+
+    
+    platforms = {
+        "google": posts.filter(platform="google"),
+        "youtube": posts.filter(platform="youtube"),
+        "facebook": posts.filter(platform="facebook"),
     }
 
-    return render(request, "dashboard/content.html", context)
+    return render(request, "dashboard/content.html", {"platforms": platforms, "active_platform": active_platform})
 
 
 
