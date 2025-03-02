@@ -21,7 +21,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.urls import path
 #___________API
-from .views import content_page, statistics
+from .views import content_page, statistics, poststatistics
 # from .views import google_search_view
 
 
@@ -36,6 +36,8 @@ urlpatterns = [
      #_______________________API
     path('content/', content_page, name='content_page'),
     path('statistics/', statistics, name='statistics'),
+
+    path('poststatistics/<int:post_id>/', poststatistics, name='poststatistics'),
     # path('google_search/', views.google_search_view, name='google_search_view'),
 ]
 

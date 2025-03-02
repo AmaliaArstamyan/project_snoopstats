@@ -51,8 +51,50 @@
     <h1 class="text-center mb-5">Post Performance Statistics</h1>
     
     <div class="row mb-5">
+      <!-- Dashboard 5 post -->
+<div class="col-md-6">
+  <!-- Navigation Tabs -->
+  <div style="margin-top: 30px;">
+    <ul class="nav nav-pills mb-4 justify-content-center" id="contentTabs">
+      <li class="nav-item mx-3">
+          <a class="nav-link {% if active_platform == 'youtube' %}active{% endif %}" href="?platform=youtube">YouTube</a>
+      </li>
+      <li class="nav-item mx-3">
+          <a class="nav-link {% if active_platform == 'facebook' %}active{% endif %}" href="?platform=facebook">Facebook</a>
+      </li>
+  </ul>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead style="color: rgb(28, 150, 243); background-color: rgb(215, 236, 245);">
+        <tr>
+            <th>Post Name</th>
+            <th>Views</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for post in top_posts %}
+          <tr>
+              <td><a href="#" class="post-link">{{ post.title }}</a></td>
+              <td>{{ post.views }}</td>
+          </tr>
+      {% empty %}
+          <tr><td colspan="2" class="text-center">No posts found for this platform.</td></tr>
+      {% endfor %}
+  </tbody>
+</table>
+  </div>
+  <!-- Engagement Section -->
+  <div class="col-md-5" style="margin-top: 20px;">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">Engagement Breakdown</h4>
+            <p class="card-text">Likes, shares, and comments per post.</p>
+            <canvas id="engagementChart"></canvas>
+        </div>
+    </div>
+</div>
       <!-- Overview Section -->
-      <div class="col-md-6">
+      <div class="col-md-11" style="margin-top: 20px;">
         <div class="card shadow-sm">
           <div class="card-body">
             <h4 class="card-title">Overview of Popular Posts</h4>
@@ -61,43 +103,32 @@
           </div>
         </div>
       </div>
-
-      <!-- Trends Section -->
-      <div class="col-md-6">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h4 class="card-title">Trending Topics</h4>
-            <p class="card-text">Check out the trends over the past month to see what's gaining popularity.</p>
-            <canvas id="trendsChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <!-- Post Analytics -->
-      <div class="col-md-12">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h4 class="card-title">Detailed Post Analytics</h4>
-            <p class="card-text">This section gives you detailed analytics on the performance of specific posts, including likes, shares, and comments.</p>
-            <canvas id="postAnalyticsChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
+      
   </div>
+  
+
+
+</div>
+       
 
   <script>
+    // Get the post titles and views from the template context and assign them to JavaScript variables
+    var postTitles = {{ post_titles|safe }};
+    var postViews = {{ post_views|safe }};
+    var postLikes = {{ post_likes|safe }};
+    var postShares = {{ post_shares|safe }};
+    var postComments = {{ post_comments|safe }};
+
+
     // Overview Chart
     var ctx = document.getElementById('overviewChart').getContext('2d');
     var overviewChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Post 1', 'Post 2', 'Post 3', 'Post 4', 'Post 5'],
+        labels: postTitles,  // Use the dynamic post titles
         datasets: [{
           label: 'Views',
-          data: [1200, 1500, 1800, 1100, 1300],
+          data: postViews,  // Use the dynamic post views
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
@@ -110,36 +141,34 @@
       }
     });
 
-    // Trends Chart
-    var ctx2 = document.getElementById('trendsChart').getContext('2d');
-    var trendsChart = new Chart(ctx2, {
-      type: 'line',
-      data: {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        datasets: [{
-          label: 'Trending Topics',
-          data: [50, 60, 90, 80],
-          borderColor: 'rgba(75, 192, 192, 1)',
-          fill: false
-        }]
-      }
+    // Initialize the Engagement Chart
+    var ctx2 = document.getElementById('engagementChart').getContext('2d');
+    var engagementChart = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: ['Likes', 'Shares', 'Comments'],
+            datasets: [{
+                data: [500, 200, 150],  // Default values
+                backgroundColor: ['#4CAF50', '#FFC107', '#FF5733']
+            }]
+        }
     });
 
-    // Post Analytics Chart
-    var ctx3 = document.getElementById('postAnalyticsChart').getContext('2d');
-    var postAnalyticsChart = new Chart(ctx3, {
-      type: 'pie',
-      data: {
-        labels: ['Likes', 'Shares', 'Comments'],
-        datasets: [{
-          label: 'Post Interaction',
-          data: [400, 250, 150],
-          backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-          borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 159, 64, 1)'],
-          borderWidth: 1
-        }]
-      }
+    // Add event listeners to the post titles
+    var postLinks = document.querySelectorAll('.post-link');  // Assuming each post title has the 'post-link' class
+    postLinks.forEach(function (link, index) {
+        link.addEventListener('click', function () {
+            // Update the Engagement Chart with the clicked post's data
+            engagementChart.data.datasets[0].data = [
+                postLikes[index],     // Likes
+                postShares[index],    // Shares
+                postComments[index]   // Comments
+            ];
+            engagementChart.update();  // Update the chart to reflect the new data
+        });
     });
+
+   
   </script>
   <!-- Footer -->
   <footer class="py-5 mt-auto">
