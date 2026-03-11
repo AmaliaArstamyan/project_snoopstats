@@ -32,15 +32,15 @@
                                         {% csrf_token %}
 
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" />
-                                            <label for="inputEmail">Email address</label>
+                                            <input class="form-control" name="username_or_email" id="inputUsernameOrEmail" type="text" placeholder="Email address or Username" />
+                                            <label for="inputUsernameOrEmail">Email address or Username</label>
                                         </div>
                                         <div class="form-floating mb-3">
                                             <input class="form-control" name="password" id="inputPassword" type="password" placeholder="Password" />
                                             <label for="inputPassword">Password</label>
                                         </div>
                                         <div class="form-check mb-3">
-                                            <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
+                                            <input class="form-check-input" name="remember_password" id="inputRememberPassword" type="checkbox" value="on" />
                                             <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">

@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class RegisterForm(forms.Form):  # Ensure this name is 'RegisterForm' and not 'RegistrationForm'
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
+    username = forms.CharField(max_length=100)
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput())
     password_confirm = forms.CharField(widget=forms.PasswordInput())

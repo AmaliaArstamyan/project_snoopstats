@@ -1,5 +1,7 @@
 from django import forms
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'name@example.com'}))
+    username_or_email = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email address or Username'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
+    remember_password = forms.BooleanField(required=False,widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
